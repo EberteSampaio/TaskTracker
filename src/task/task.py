@@ -1,11 +1,10 @@
-from enum import StrEnum, auto
 from datetime import datetime
+from enum import StrEnum, auto
 
 class TaskStatus(StrEnum):
     done = auto()
     todo = auto()
     in_progress = auto()
-
 
 class Task:
     def __init__(self, description: str) -> None:
