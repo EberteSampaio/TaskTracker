@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from enum import StrEnum, auto
 
@@ -10,6 +11,7 @@ class Task:
     def __init__(self, description: str) -> None:
         if not isinstance(description, str):
             raise TypeError("Task description must be a string")
+        self.id = str(uuid.uuid4())
         self.description = description
         self.status = TaskStatus.todo
         self.created_at = datetime.now()
