@@ -21,12 +21,7 @@ class CreateTaskCommand(ICommand):
     def execute(self) -> None:
         task = Task(self.description)
         self.repository.create(task)
-        print(f"""
- New Task:
- id -> {task.id}
- description -> {task.description}
- status -> {task.status}
-""")
+        print(f"Task added successfully (ID: {task.id})")
 
 class ReadTaskCommand(ICommand):
     def __init__(self, repository: ITaskRepository, payload: str|None = None) -> None:
