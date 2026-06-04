@@ -58,7 +58,9 @@ class JsonTaskRepository(ITaskRepository):
         data = self._read_file()
         for i, item in enumerate(data):
             if item["id"] == task_id:
-                data[i]["description"] = description
+                task = Task.from_dict(data[i])
+                task.set_description(description)
+                data[i] = task.to_dict()
                 break
 
         self._save_file(data)

@@ -28,6 +28,10 @@ class Task:
     def __str__(self) -> str:
         return f"[{self.id}] - {self.description} -> {self.status}"
 
+    def set_description(self, description: str) -> None:
+        self.description = description
+        self.updated_at = datetime.now()
+
     def to_dict(self) -> dict:
         return {
             "id": self.id,
