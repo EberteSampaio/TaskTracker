@@ -2,6 +2,7 @@ import json
 import os
 from abc import ABC, abstractmethod
 
+from src.task.exceptions.exceptions import TaskNotFoundException
 from src.task.task import Task, TaskStatus
 
 
@@ -71,6 +72,8 @@ class JsonTaskRepository(ITaskRepository):
                 task.mark_in_progress()
                 data[i] = task.to_dict()
                 break
+            else:
+                raise TaskNotFoundException("Task not found")
         self._save_file(data)
 
     def mark_done(self, task_id: str) -> None:
@@ -82,6 +85,8 @@ class JsonTaskRepository(ITaskRepository):
                 task.mark_done()
                 data[i] = task.to_dict()
                 break
+            else:
+                raise TaskNotFoundException("Task not found")
         self._save_file(data)
 
     def _read_file(self) -> list:

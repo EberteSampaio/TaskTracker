@@ -3,7 +3,7 @@ import argparse
 from src.task.commands import CreateTaskCommand, UpdateTaskCommand, DeleteTaskCommand, ReadTaskCommand, CommandExecutor, \
     MarkDoneTaskCommand, MarkInProgressTaskCommand
 from src.task.dispatch_action import DispatchAction
-from src.task.exceptions.exceptions import CommandNotFoundException
+from src.task.exceptions.exceptions import CommandNotFoundException, DomainException
 from src.task.repository import JsonTaskRepository
 
 
@@ -61,8 +61,10 @@ def main() -> None:
     try:
         args = parser_config()
         dispach_command(args)
-    except Exception as e:
+    except DomainException as e:
         print(e)
+    except Exception as e:
+        raise e
 
 if __name__ == '__main__':
     main()

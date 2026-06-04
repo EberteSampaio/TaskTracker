@@ -41,6 +41,10 @@ class ReadTaskCommand(ICommand):
 
         data = self.repository.read_all(filter)
 
+        if not data:
+            print(f"There is no task for the given parameter ({self.task_status}).")
+            return
+
         print("Tasks")
         for task in data:
             print(f"""
