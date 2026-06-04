@@ -26,7 +26,7 @@ Uma ferramenta de linha de comando para gerenciar suas tarefas do dia a dia. Aco
 Clone o repositório e acesse o diretório:
 
 ```bash
-git clone https://github.com/seu-usuario/TaskTracker.git
+git clone git@github.com:EberteSampaio/TaskTracker.git
 cd TaskTracker
 ```
 
@@ -34,6 +34,7 @@ Crie e ative um ambiente virtual:
 
 ```bash
 python -m venv .venv
+python -m venv .venv             # WSL
 source .venv/bin/activate        # Linux/macOS
 .venv\Scripts\activate           # Windows
 ```
