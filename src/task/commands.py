@@ -1,6 +1,5 @@
-import uuid
 from abc import ABC, abstractmethod
-
+from src.task.repository import ITaskRepository
 from src.task.task import Task, TaskStatus
 
 
@@ -15,32 +14,71 @@ class CommandExecutor:
         command.execute()
 
 class CreateTaskCommand(ICommand):
-    def __init__(self, description: str) -> None:
-        self.description = description
+    def __init__(self, repository: ITaskRepository, payload: str) -> None:
+        self.repository = repository
+        self.description = payload
 
     def execute(self) -> None:
         task = Task(self.description)
-        print(f"Criando tarefa '{self.description}' com ID: {task.id}")
+        self.repository.create(task)
+        print(f"""
+ New Task:
+ id -> {task.id}
+ description -> {task.description}
+ status -> {task.status}
+""")
 
 class ReadTaskCommand(ICommand):
-    def __init__(self, task_status: TaskStatus) -> None:
-        self.task_status = task_status
+    def __init__(self, repository: ITaskRepository, payload: str|None = None) -> None:
+        self.repository = repository
+        self.task_status = payload
 
     def execute(self) -> None:
-        print(f"{self.task_status}")
+        filter = None
+
+        if self.task_status and self.task_status != "all":
+            filter = TaskStatus(self.task_status)
+
+        data = self.repository.read_all(filter)
+
+        print("Tasks")
+        for task in data:
+            print(f"""
+{task}
+            """)
+
+
 
 class UpdateTaskCommand(ICommand):
 
-    def __init__(self,update_data:list[str]) -> None:
-        self.task_id = update_data[0]
-        self.description = update_data[1]
+    def __init__(self,repository: ITaskRepository, payload:str) -> None:
+        self.repository = repository
+        self.task_id = payload[0]
+        self.description = payload[1]
 
     def execute(self) -> None:
-        print(f"Update - id: {self.task_id} -> new: {self.description}")
+        self.repository.update(self.task_id, self.description)
 
 class DeleteTaskCommand(ICommand):
-    def __init__(self, task_id: str) -> None:
-        self.task_id = task_id
+    def __init__(self, repository: ITaskRepository, payload: str) -> None:
+        self.repository = repository
+        self.task_id = payload
 
     def execute(self) -> None:
-        print(f"Delete - id: {self.task_id}")
+        self.repository.delete(self.task_id)
+
+class MarkInProgressTaskCommand(ICommand):
+    def __init__(self,repository: ITaskRepository, payload: str) -> None:
+        self.repository = repository
+        self.task_id = payload
+
+    def execute(self) -> None:
+        self.repository.mark_in_progress(self.task_id)
+
+class MarkDoneTaskCommand(ICommand):
+    def __init__(self, repository: ITaskRepository, payload: str) -> None:
+        self.repository = repository
+        self.task_id = payload
+
+    def execute(self) -> None:
+        self.repository.mark_done(self.task_id)
