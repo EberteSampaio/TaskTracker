@@ -8,10 +8,10 @@ class TaskStatus(StrEnum):
     in_progress = auto()
 
 class Task:
-    def __init__(self, description: str) -> None:
+    def __init__(self, description: str, id: int|None = None) -> None:
         if not isinstance(description, str):
             raise TypeError("Task description must be a string")
-        self.id = str(uuid.uuid4())
+        self.id = id
         self.description = description
         self.status = TaskStatus.todo
         self.created_at = datetime.now()
