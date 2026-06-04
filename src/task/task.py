@@ -17,7 +17,6 @@ class Task:
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
 
-
     def mark_in_progress(self) -> None:
         self.status = TaskStatus.in_progress
         self.updated_at = datetime.now()
@@ -27,4 +26,23 @@ class Task:
         self.updated_at = datetime.now()
 
     def __str__(self) -> str:
-        return f"{self.description} - {self.status}"
+        return f"[{self.id}] - {self.description} -> {self.status}"
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "description": self.description,
+            "status": self.status,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat()
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Task":
+        task = cls(data["description"])
+        task.id = data["id"]
+        task.status = TaskStatus(data["status"])
+        task.created_at = datetime.fromisoformat(data["created_at"])
+        task.updated_at = datetime.fromisoformat(data["updated_at"])
+
+        return task
