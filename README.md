@@ -43,61 +43,61 @@ source .venv/bin/activate        # Linux/macOS
 
 ## Uso
 
-O ponto de entrada é o arquivo `task-cli.py`. Todos os comandos são passados via flags.
+O ponto de entrada é o arquivo `task-cli.py`. Todos os comandos são passados como argumentos posicionais.
 
 ### Adicionar uma tarefa
 
 ```bash
-python task-cli.py --add "Comprar mantimentos"
-# Output: Task added successfully (ID: <uuid>)
+python task-cli.py add "Comprar mantimentos"
+# Output: Task added successfully (ID: 1)
 ```
 
 ### Atualizar uma tarefa
 
 ```bash
-python task-cli.py --update <id> "Nova descrição da tarefa"
+python task-cli.py update <id> "Nova descrição da tarefa"
 ```
 
 ### Deletar uma tarefa
 
 ```bash
-python task-cli.py --delete <id>
+python task-cli.py delete <id>
 ```
 
 ### Marcar como em progresso
 
 ```bash
-python task-cli.py --mark_in_progress <id>
+python task-cli.py mark-in-progress <id>
 ```
 
 ### Marcar como concluída
 
 ```bash
-python task-cli.py --mark_done <id>
+python task-cli.py mark-done <id>
 ```
 
 ### Listar tarefas
 
 ```bash
 # Listar todas
-python task-cli.py --list
+python task-cli.py list
 
 # Filtrar por status
-python task-cli.py --list todo
-python task-cli.py --list in_progress
-python task-cli.py --list done
+python task-cli.py list todo
+python task-cli.py list in-progress
+python task-cli.py list done
 ```
 
-### Flags resumidas
+### Comandos resumidos
 
-| Flag curta | Flag longa          | Descrição                              |
-|------------|---------------------|----------------------------------------|
-| `-a`       | `--add`             | Adiciona uma nova tarefa               |
-| `-u`       | `--update`          | Atualiza descrição de uma tarefa       |
-| `-d`       | `--delete`          | Remove uma tarefa                      |
-| `-l`       | `--list`            | Lista tarefas (com filtro opcional)    |
-| `-mi`      | `--mark_in_progress`| Marca uma tarefa como em progresso     |
-| `-md`      | `--mark_done`       | Marca uma tarefa como concluída        |
+| Comando              | Descrição                              |
+|----------------------|----------------------------------------|
+| `add <desc>`         | Adiciona uma nova tarefa               |
+| `update <id> <desc>` | Atualiza descrição de uma tarefa       |
+| `delete <id>`        | Remove uma tarefa                      |
+| `list [status]`      | Lista tarefas (com filtro opcional)    |
+| `mark-in-progress <id>` | Marca uma tarefa como em progresso  |
+| `mark-done <id>`     | Marca uma tarefa como concluída        |
 
 ---
 
@@ -112,7 +112,6 @@ TaskTracker/
         ├── task.py              # Modelo Task e enum TaskStatus
         ├── commands.py          # Padrão Command (ICommand + implementações)
         ├── repository.py        # Padrão Repository (interface + JsonTaskRepository)
-        ├── dispatch_action.py   # Action customizada para argparse
         └── exceptions/
             └── exceptions.py    # Exceções de domínio
 ```
@@ -130,7 +129,7 @@ TaskTracker/
 | Status        | Descrição                        |
 |---------------|----------------------------------|
 | `todo`        | Tarefa criada, ainda não iniciada |
-| `in_progress` | Tarefa em andamento               |
+| `in-progress` | Tarefa em andamento               |
 | `done`        | Tarefa concluída                  |
 
 ---
@@ -140,9 +139,9 @@ TaskTracker/
 ```json
 [
     {
-        "id": "a1b2c3d4-...",
+        "id": 1,
         "description": "Comprar mantimentos",
-        "status": "in_progress",
+        "status": "in-progress",
         "created_at": "2026-06-04T10:00:00",
         "updated_at": "2026-06-04T11:30:00"
     }
