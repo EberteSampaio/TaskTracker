@@ -65,6 +65,7 @@ class JsonTaskRepository(ITaskRepository):
 
     def mark_in_progress(self, task_id: str) -> None:
         data = self._read_file()
+        task = None
 
         for i, item in enumerate(data):
             if item.get("id") == task_id:
@@ -72,21 +73,24 @@ class JsonTaskRepository(ITaskRepository):
                 task.mark_in_progress()
                 data[i] = task.to_dict()
                 break
-            else:
-                raise TaskNotFoundException("Task not found")
+
+        if not task:
+            raise TaskNotFoundException("Task not found")
+
         self._save_file(data)
 
     def mark_done(self, task_id: str) -> None:
         data = self._read_file()
-
+        task = None
         for i, item in enumerate(data):
             if item.get("id") == task_id:
                 task = Task.from_dict(data[i])
                 task.mark_done()
                 data[i] = task.to_dict()
                 break
-            else:
-                raise TaskNotFoundException("Task not found")
+
+        if not task:
+            raise TaskNotFoundException("Task not found")
         self._save_file(data)
 
     def _read_file(self) -> list:
