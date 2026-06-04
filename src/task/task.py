@@ -5,7 +5,7 @@ from enum import StrEnum, auto
 class TaskStatus(StrEnum):
     done = auto()
     todo = auto()
-    in_progress = auto()
+    in_progress = "in-progress"
 
 class Task:
     def __init__(self, description: str, id: int|None = None) -> None:

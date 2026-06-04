@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from argparse import Namespace
 
+from src.task.exceptions.exceptions import DomainException
 from src.task.repository import ITaskRepository
 from src.task.task import Task, TaskStatus
 
@@ -28,10 +29,13 @@ class CreateTaskCommand(ICommand):
 class ReadTaskCommand(ICommand):
     def __init__(self, repository: ITaskRepository, args: Namespace) -> None:
         self.repository = repository
-        self.task_status = TaskStatus(args.status)
+        self.task_status = args.status
 
     def execute(self) -> None:
-        data = self.repository.read_all(self.task_status)
+
+        status = TaskStatus(self.task_status) if self.task_status else None
+
+        data = self.repository.read_all(status)
 
         if not data:
             print(f"There is no task for the given parameter ({self.task_status}).")
@@ -39,11 +43,7 @@ class ReadTaskCommand(ICommand):
 
         print("Tasks")
         for task in data:
-            print(f"""
-{task}
-            """)
-
-
+            print(task)
 
 class UpdateTaskCommand(ICommand):
 

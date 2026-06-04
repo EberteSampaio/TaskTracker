@@ -46,21 +46,36 @@ class JsonTaskRepository(ITaskRepository):
 
     def delete(self, task_id: int):
         data = self._read_file()
-        new_data = [item for item in data if item.get("id") != task_id]
+        new_data = []
+        is_deleted = False
+        for i, item in enumerate(data):
+            if item["id"] == task_id:
+                is_deleted = True
+            else:
+                new_data.append(item)
+
+        if not is_deleted:
+            raise TaskNotFoundException("Task not found")
+
         self._save_file(new_data)
 
-    def read_all(self, task_status: TaskStatus| None = None) -> list[Task]:
+    def read_all(self, task_status: TaskStatus|None) -> list[Task]:
         data = self._read_file()
-        return [Task.from_dict(item) for item in data if item.get("status") == task_status]
+        return [Task.from_dict(item) for item in data] if task_status is None else [Task.from_dict(item) for item in data if item.get("status") == task_status]
 
     def update(self, task_id: int, description: str) -> None:
         data = self._read_file()
+        is_updated = False
         for i, item in enumerate(data):
             if item["id"] == task_id:
                 task = Task.from_dict(data[i])
                 task.set_description(description)
                 data[i] = task.to_dict()
+                is_updated = True
                 break
+
+        if not is_updated:
+            raise TaskNotFoundException("Task not found")
 
         self._save_file(data)
 
